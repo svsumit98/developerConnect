@@ -1,0 +1,19 @@
+{
+  "name": "dev_connect-bd",
+  "version": "1.0.0",
+  "description": "Connection for Developers",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/app.js"
+  },
+  "keywords": [
+    "nodejs",
+    "javascript"
+  ],
+  "author": "Sumit Verma",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}
+
