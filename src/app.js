@@ -5,6 +5,7 @@ const User = require('./models/user');
 
 app.use(express.json()); //Converts the JSON to JS Object, and applicable is all routes.
 
+
 app.post("/signup", async (req, res) => {
   // console.log(req.body); //this will give the JS object passed from the Postman.
 
@@ -67,18 +68,30 @@ app.delete("/user", async (req, res) => {
 });
 
 // Update data of the user
-app.patch("/user", async (req, res) => {
-  const userId = req.body.userId;
+app.patch("/user/:userId", async (req, res) => {
+  const userId = req.params?.userId;
   const data = req.body;
   try{
-    // const user = await User.findByIdAndUpdate({_id: userId}, data, {returnDocument: "after"}); //return document of user after the update, you can also use before inplace of after.
-    // console.log(user);
-    await User.findByIdAndUpdate({_id: userId}, data);
+    const ALLOWED_UPDATES = ["photoUrl", "about", "gender", "age", "skills"];
+
+    const isUpdateAllowed = Object.keys(data).every((k) =>
+      ALLOWED_UPDATES.includes(k)
+    );
+    if(!isUpdateAllowed){
+      throw new Error("Update not allowed");
+    }
+    if(data?.skills.length > 10){
+      throw new Error("Skills cannot be more than 10");
+    }
+    const user = await User.findByIdAndUpdate({_id: userId}, data, {returnDocument: "after", runValidators: true,});
+    console.log(user);
     res.send("User updated successfully");
   } catch (err) {
-    res.status(400).send("something went wrong!!");
+    res.status(400).send("UPDATE FAILED " + err.message);
   }
 });
+
+
 
 connectDB()
   .then(() => {
