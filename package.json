@@ -4,7 +4,7 @@
   "description": "Connection for Developers",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node src/app.js",
     "dev": "nodemon src/app.js"
   },
   "keywords": [
